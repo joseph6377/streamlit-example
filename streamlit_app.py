@@ -114,6 +114,12 @@ def display_workout_entries():
         st.table(df)
         st.write()
 
+    if st.button("Delete All Entries"):
+        # Call function to delete all entries
+        delete_all_entries()
+        st.write("All entries deleted successfully.")
+
+
 
 def main():
     st.title("Workout Tracker by JT")
