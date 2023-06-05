@@ -101,4 +101,54 @@ def display_workout_entries():
     entries_by_date = {}
 
     # Group entries by date
-    for day, entries in
+    for day, entries in data.items():
+        if not day.endswith("_last"):
+            for entry in entries:
+                date = entry["date"]
+                if date not in entries_by_date:
+                    entries_by_date[date] = []
+                entries_by_date[date].append(entry)
+
+    # Display entries by date in a table
+    for date, entries in entries_by_date.items():
+        st.subheader(f"Workout Entries for Date: {date}")
+        table_data = []
+        header = ["Exercise", "Sets", "Reps", "Weight"]
+        table_data.append(header)
+
+        for entry in entries:
+            exercise = entry["exercise"]
+            sets = len(entry["sets"])
+            reps = ", ".join(str(set_entry["reps"]) for set_entry in entry["sets"])
+            weight = ", ".join(str(set_entry["weight"]) for set_entry in entry["sets"])
+            table_data.append([exercise, sets, reps, weight])
+
+        df = pd.DataFrame(table_data[1:], columns=table_data[0])
+        st.table(df)
+        st.write()
+
+def main():
+    st.title("Workout Tracker")
+
+    choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries"])
+
+    if choice == "Add a workout entry":
+        day = st.selectbox("Select a combo", list(exercise_data.keys()))
+        exercise = st.selectbox("Select an exercise", exercise_data[day])
+        sets = st.number_input("Enter the number of sets", value=0, step=1)
+
+        if sets > 0:
+            st.write("Enter the reps and weight for each set:")
+            for set_num in range(1, sets + 1):
+                st.write(f"Set {set_num}")
+                reps = st.number_input("Reps", value=0, step=1, key=f"{day}-{exercise}-reps-{set_num}")
+                weight = st.number_input("Weight (in kg)", value=0.0, step=0.5, key=f"{day}-{exercise}-weight-{set_num}")
+
+        if st.button("Add Entry"):
+            add_workout_entry(day, exercise, sets, reps, weight)
+
+    elif choice == "Display all workout entries":
+        display_workout_entries()
+
+if __name__ == "__main__":
+    main()
