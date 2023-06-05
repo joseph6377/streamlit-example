@@ -99,24 +99,8 @@ def display_workout_entries():
                 st.write(f"Date: {date}, Exercise: {exercise}, Sets: {sets}, Reps: {reps}, Weight: {weight}")
             st.write()
 
-def login():
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-    if st.button("Login"):
-        # Add your login logic here
-        # For simplicity, let's assume the username is "admin" and password is "password"
-        if username == "admin" and password == "password":
-            st.success("Login successful!")
-            return True
-        else:
-            st.error("Invalid username or password.")
-    return False
-
 def main():
     st.title("Workout Tracker")
-    
-    if not login():
-        return
 
     choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries", "Quit"])
     
