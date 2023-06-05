@@ -76,15 +76,23 @@ def add_workout_entry(day, exercise, sets, reps, weight):
         "date": datetime.now().strftime("%Y-%m-%d"),
         "day": day,
         "exercise": exercise,
-        "sets": sets,
-        "reps": reps,
-        "weight": weight
+        "sets": []
     }
+
+    # Collect reps and weight for each set
+    for i in range(sets):
+        set_number = i + 1
+        set_reps = st.number_input(f"Enter reps for Set {set_number}", value=0, step=1, key=f"reps_{set_number}")
+        set_weight = st.number_input(f"Enter weight (in kg) for Set {set_number}", value=0.0, step=0.5, key=f"weight_{set_number}")
+        set_entry = {"set_number": set_number, "reps": set_reps, "weight": set_weight}
+        entry["sets"].append(set_entry)
+
     if day not in data:
         data[day] = []
     data[day].append(entry)
     save_workout_data(data)
     st.write("Workout entry added successfully.")
+
 
 
 
