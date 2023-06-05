@@ -102,6 +102,8 @@ def display_workout_entries():
     for date, entries in entries_by_date.items():
         st.subheader(f"Workout Entries for Date: {date}")
         table_data = []
+        header = ["Exercise", "Sets", "Reps", "Weight"]
+        table_data.append(header)
         for entry in entries:
             exercise = entry["exercise"]
             sets = entry["sets"]
