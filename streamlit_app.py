@@ -119,13 +119,18 @@ def display_workout_entries():
         for entry in entries:
             exercise = entry["exercise"]
             sets = len(entry["sets"])
-            reps = ", ".join(str(set_entry["reps"]) for set_entry in entry["sets"])
-            weight = ", ".join(str(set_entry["weight"]) for set_entry in entry["sets"])
+            reps_list = []
+            weight_list = []
+            for set_entry in entry["sets"]:
+                reps_list.append(set_entry["reps"])
+                weight_list.append(set_entry["weight"])
+            reps = ", ".join(str(reps) for reps in reps_list)
+            weight = ", ".join(str(weight) for weight in weight_list)
             table_data.append([exercise, sets, reps, weight])
 
-        df = pd.DataFrame(table_data[1:], columns=table_data[0])
-        st.table(df)
+        st.table(table_data)
         st.write()
+
 
 def main():
     st.title("Workout Tracker")
