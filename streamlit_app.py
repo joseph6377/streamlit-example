@@ -100,7 +100,7 @@ def display_workout_entries():
             st.write()
 
 def main():
-    st.title("Workout Tracker")
+    st.title("Workout Tracker by JT")
 
     choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries", "Quit"])
     
