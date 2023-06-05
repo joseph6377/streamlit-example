@@ -79,7 +79,7 @@ def add_workout_entry(day, exercise, sets, reps, weight):
         "sets": [],
     }
 
-  for set_num in range(1, sets + 1):
+    for set_num in range(1, sets + 1):
         set_key = f"{day}-{exercise}-set-{set_num}"
         set_header = st.subheader(f"Set {set_num}")
         with st.expander(set_header):
@@ -94,6 +94,7 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     data[day].append(entry)
     save_workout_data(data)
     st.write("Workout entry added successfully.")
+
 
 
 def display_workout_entries():
