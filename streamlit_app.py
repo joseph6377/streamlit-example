@@ -87,17 +87,23 @@ def add_workout_entry(day, exercise, sets, reps, weight):
 
 def display_workout_entries():
     data = load_workout_data()
+
     for day, entries in data.items():
         if not day.endswith("_last"):
             st.write(f"{day}:")
+            table_data = []
             for entry in entries:
                 date = entry["date"]
                 exercise = entry["exercise"]
                 sets = entry["sets"]
                 reps = entry["reps"]
                 weight = entry["weight"]
-                st.write(f"Date: {date}, Exercise: {exercise}, Sets: {sets}, Reps: {reps}, Weight: {weight}")
+                table_data.append([date, exercise, sets, reps, weight])
+            
+            # Display entries in a table
+            st.table(table_data)
             st.write()
+
 
 def main():
     st.title("Workout Tracker by JT")
