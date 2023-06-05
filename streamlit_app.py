@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 from datetime import datetime
+import pandas as pd
 
 # Define the exercise data and default values
 exercise_data = {
@@ -102,8 +103,6 @@ def display_workout_entries():
     for date, entries in entries_by_date.items():
         st.subheader(f"Workout Entries for Date: {date}")
         table_data = []
-        header = ["Exercise", "Sets", "Reps", "Weight"]
-        table_data.append(header)
         for entry in entries:
             exercise = entry["exercise"]
             sets = entry["sets"]
@@ -111,7 +110,8 @@ def display_workout_entries():
             weight = entry["weight"]
             table_data.append([exercise, sets, reps, weight])
 
-        st.table(table_data)
+        df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
+        st.table(df)
         st.write()
 
 
