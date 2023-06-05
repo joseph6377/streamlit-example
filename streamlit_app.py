@@ -71,7 +71,7 @@ def save_workout_data(data):
         json.dump(data, file)
 
 
- def add_workout_entry(day, exercise, sets, reps, weight):
+def add_workout_entry(day, exercise, sets, reps, weight):
     data = load_workout_data()
     entry = {
         "date": datetime.now().strftime("%Y-%m-%d"),
