@@ -113,8 +113,25 @@ def display_workout_entries():
             table_data.append([exercise, sets, reps, weight])
 
         df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
+
+        # Add delete button for each entry
+        df["Delete"] = [st.button(f"Delete Entry {index+1}") for index in range(len(entries))]
+
+        # Filter out entries to be deleted
+        to_delete = df[df["Delete"]].index
+        entries = [entry for index, entry in enumerate(entries) if index not in to_delete]
+
+        # Update workout data
+        if date in data:
+            data[date] = entries
+            save_workout_data(data)
+
+        # Remove the delete column before displaying the table
+        df = df.drop(columns=["Delete"])
+
         st.table(df)
         st.write()
+
 
 
 def main():
