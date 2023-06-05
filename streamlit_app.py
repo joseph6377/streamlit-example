@@ -82,9 +82,9 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     for set_num in range(1, sets + 1):
         set_key = f"{day}-{exercise}-set-{set_num}"
         set_header = st.subheader(f"Set {set_num}")
-        with st.expander(f"Set {set_num}"):
-            reps_input_key = f"{day}-{exercise}-reps-{set_num}"
-            weight_input_key = f"{day}-{exercise}-weight-{set_num}"
+        with st.expander(set_header):
+            reps_input_key = f"{set_key}-reps"
+            weight_input_key = f"{set_key}-weight"
             reps_input = st.number_input(f"Reps for Set {set_num}", value=0, step=1, key=reps_input_key)
             weight_input = st.number_input(f"Weight for Set {set_num} (in kg)", value=0.0, step=0.5, key=weight_input_key)
             entry["sets"].append({"reps": reps_input, "weight": weight_input})
