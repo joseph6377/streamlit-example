@@ -142,7 +142,7 @@ elif choice == "Display all workout entries":
             weight = set_data["weight"]
             st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
 
-    elif choice == "Display all workout entries":
+  elif choice == "Display all workout entries":
         display_workout_entries()
 
 if __name__ == "__main__":
