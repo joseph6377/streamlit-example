@@ -98,16 +98,15 @@ def add_workout_entry(day, exercise, sets, reps, weight):
 
 def display_workout_entries():
     data = load_workout_data()
-    entries_by_date = {}
 
     # Group entries by date
+    entries_by_date = {}
     for day, entries in data.items():
-        if not day.endswith("_last"):
-            for entry in entries:
-                date = entry["date"]
-                if date not in entries_by_date:
-                    entries_by_date[date] = []
-                entries_by_date[date].append(entry)
+        for entry in entries:
+            date = entry["date"]
+            if date not in entries_by_date:
+                entries_by_date[date] = []
+            entries_by_date[date].append(entry)
 
     # Display entries by date in a table
     for date, entries in entries_by_date.items():
@@ -119,14 +118,10 @@ def display_workout_entries():
         for entry in entries:
             exercise = entry["exercise"]
             sets = len(entry["sets"])
-            reps_list = []
-            weight_list = []
             for set_entry in entry["sets"]:
-                reps_list.append(set_entry["reps"])
-                weight_list.append(set_entry["weight"])
-            reps = ", ".join(str(reps) for reps in reps_list)
-            weight = ", ".join(str(weight) for weight in weight_list)
-            table_data.append([exercise, sets, reps, weight])
+                reps = set_entry["reps"]
+                weight = set_entry["weight"]
+                table_data.append([exercise, sets, reps, weight])
 
         st.table(table_data)
         st.write()
