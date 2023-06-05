@@ -85,28 +85,34 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     data[day].append(entry)
     save_workout_data(data)
     st.write("Workout entry added successfully.")
+
 def display_workout_entries():
     data = load_workout_data()
+    entries_by_date = {}
+
+    # Group entries by date
     for day, entries in data.items():
         if not day.endswith("_last"):
-            st.write(f"{day}:")
             for entry in entries:
                 date = entry["date"]
-                exercise = entry["exercise"]
-                sets = entry["sets"]
-                reps = entry["reps"]
-                weight = entry["weight"]
-                st.write(f"Date: {date}, Exercise: {exercise}, Sets: {sets}, Reps: {reps}, Weight: {weight}")
-            st.write()
+                if date not in entries_by_date:
+                    entries_by_date[date] = []
+                entries_by_date[date].append(entry)
 
-    if st.button("Delete All Entries"):
-        confirm = st.checkbox("I confirm that I want to delete all workout entries.")
-        if confirm:
-            # Clear all workout entries
-            save_workout_data({})
-            st.write("All workout entries have been deleted.")
+    # Display entries by date in a table
+    for date, entries in entries_by_date.items():
+        st.subheader(f"Workout Entries for Date: {date}")
+        table_data = []
+        for entry in entries:
+            exercise = entry["exercise"]
+            sets = entry["sets"]
+            reps = entry["reps"]
+            weight = entry["weight"]
+            table_data.append([exercise, sets, reps, weight])
 
-
+        df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
+        st.table(df)
+        st.write()
 
 
 def main():
