@@ -70,7 +70,8 @@ def save_workout_data(data):
     with open("workout_data.json", "w") as file:
         json.dump(data, file)
 
-def add_workout_entry(day, exercise, sets, reps, weight):
+
+ def add_workout_entry(day, exercise, sets, reps, weight):
     data = load_workout_data()
     entry = {
         "date": datetime.now().strftime("%Y-%m-%d"),
@@ -84,8 +85,8 @@ def add_workout_entry(day, exercise, sets, reps, weight):
         with st.expander(set_header):
             reps_input_key = f"reps-{exercise}-{set_num}"
             weight_input_key = f"weight-{exercise}-{set_num}"
-            reps_input = st.number_input(f"Reps for Set {set_num}", value=0, step=1, key=reps_input_key)
-            weight_input = st.number_input(f"Weight for Set {set_num} (in kg)", value=0.0, step=0.5, key=weight_input_key)
+            reps_input = st.number_input(f"Reps for Set {set_num}", value=reps, step=1, key=reps_input_key)
+            weight_input = st.number_input(f"Weight for Set {set_num} (in kg)", value=weight, step=0.5, key=weight_input_key)
             entry["sets"].append({"reps": reps_input, "weight": weight_input})
 
     if day not in data:
@@ -93,7 +94,7 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     data[day].append(entry)
     save_workout_data(data)
     st.write("Workout entry added successfully.")
-    
+   
     
 def display_workout_entries():
     data = load_workout_data()
