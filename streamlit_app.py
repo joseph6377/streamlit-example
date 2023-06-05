@@ -86,6 +86,11 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     save_workout_data(data)
     st.write("Workout entry added successfully.")
 
+def delete_all_entries():
+    data = load_workout_data()
+    data.clear()
+    save_workout_data(data)
+
 def display_workout_entries():
     data = load_workout_data()
     entries_by_date = {}
@@ -113,6 +118,11 @@ def display_workout_entries():
         df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
         st.table(df)
         st.write()
+
+    if st.button("Delete All Entries"):
+        delete_all_entries()
+        st.write("All entries deleted successfully.")
+
 
     if st.button("Delete All Entries"):
         # Call function to delete all entries
