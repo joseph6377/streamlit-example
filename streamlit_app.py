@@ -70,7 +70,6 @@ def save_workout_data(data):
     with open("workout_data.json", "w") as file:
         json.dump(data, file)
 
-
 def add_workout_entry(day, exercise, sets, reps, weight):
     data = load_workout_data()
     entry = {
@@ -94,6 +93,7 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     data[day].append(entry)
     save_workout_data(data)
     st.write("Workout entry added successfully.")
+
    
     
 def display_workout_entries():
