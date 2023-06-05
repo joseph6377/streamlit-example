@@ -90,6 +90,8 @@ import pandas as pd
 
 import pandas as pd
 
+import pandas as pd
+
 def display_workout_entries():
     data = load_workout_data()
     entries_by_date = {}
@@ -112,9 +114,11 @@ def display_workout_entries():
             sets = entry["sets"]
             reps = entry["reps"]
             weight = entry["weight"]
-            table_data.append([exercise, sets, reps, weight])
+            delete_icon = "<span style='color:red;cursor:pointer;'>&times;</span>"
+            table_data.append([delete_icon, exercise, sets, reps, weight])
 
-        df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
+        df = pd.DataFrame(table_data, columns=["Delete", "Exercise", "Sets", "Reps", "Weight"])
+        df = df.style.hide_index()
         st.table(df)
         st.write()
 
