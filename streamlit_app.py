@@ -3,6 +3,8 @@ import json
 import os
 from datetime import datetime
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 # Define the exercise data and default values
 exercise_data = {
@@ -101,7 +103,7 @@ def display_workout_entries():
         grouped_entries = {}
 
         for entry in workout_entries:
-            date_str = datetime.strptime(entry["date"], "%Y-%m-%d").strftime("%B %d, %Y (%A)")
+            date_str = datetime.strptime(entry["date"], "%Y-%m-%d").strftime("%b %d %y (%a)")
             exercise = entry["exercise"]
             key = (date_str, exercise)
             if key not in grouped_entries:
@@ -111,16 +113,47 @@ def display_workout_entries():
         st.write("Here are all your workout entries:")
 
         table_data = []
+        exercise_volumes = {}  # To store exercise volumes
+
         for (date_str, exercise), entries in grouped_entries.items():
+            total_sets = 0
+            total_reps = 0
+            total_weight = 0
             for i, entry in enumerate(entries, start=1):
                 sets = entry["sets"]
                 num_sets = len(sets)
                 reps_list = [set_data.get("reps", 0) for set_data in sets]
                 weight_list = [set_data.get("weight", 0) for set_data in sets]
+                total_sets += num_sets
+                total_reps += sum(reps_list)
+                total_weight += sum(weight_list)
                 table_data.append((date_str, exercise, num_sets, reps_list, weight_list))
 
+            # Calculate exercise volume
+            volume = total_sets * total_reps * total_weight
+            if exercise not in exercise_volumes:
+                exercise_volumes[exercise] = []
+            exercise_volumes[exercise].append((datetime.strptime(date_str, "%b %d %y (%a)"), volume))
+
+        # Display table
         df = pd.DataFrame(table_data, columns=["Date", "Exercise", "Number of Sets", "Reps", "Weight"])
         st.dataframe(df)
+
+        # Plot exercise volumes
+        if st.button("Plot Exercise Volumes"):
+            plt.figure(figsize=(10, 6))
+            for exercise, volumes in exercise_volumes.items():
+                dates = [x[0] for x in volumes]
+                volume = [x[1] for x in volumes]
+                plt.plot(dates, volume, label=exercise)
+            plt.xlabel("Date")
+            plt.ylabel("Exercise Volume")
+            plt.title("Exercise Volume over Time")
+            plt.legend()
+            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%b %d %y (%a)"))  # Format x-axis dates
+            plt.gca().xaxis.set_major_locator(mdates.DayLocator())  # Set x-axis tick frequency to daily
+            plt.xticks(rotation=45)
+            st.pyplot(plt)
 def main():
     st.title("Workout Tracker")
 
