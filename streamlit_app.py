@@ -94,7 +94,7 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     save_workout_data(data)
     st.write("Workout entry added successfully.")
 
-workout_entries = []
+
 
 def display_workout_entries():
     for entry in workout_entries:
