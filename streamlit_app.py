@@ -102,11 +102,10 @@ def display_workout_entries():
         st.subheader(day)
         for entry in entries:
             exercise = entry["exercise"]
-            sets = len(entry["sets"])  # Retrieve the number of sets in the entry
+            sets = len(entry["sets"])
             st.write(f"Exercise: {exercise}")
             st.write(f"Number of Sets: {sets}")
-            for set_num in range(sets):
-                set_data = entry["sets"][set_num]
+            for set_num, set_data in enumerate(entry["sets"]):
                 reps = set_data["reps"]
                 weight = set_data["weight"]
                 st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
