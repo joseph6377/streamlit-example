@@ -95,30 +95,13 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     st.write("Workout entry added successfully.")
 
 def display_workout_entries():
-    data = load_workout_data()
-
-    if not data:  # Check if data is empty
-        st.info("No workout entries found.")
-        return
-
-    for date, entries in data.items():
-        st.subheader(date)
-        if not entries:  # Check if entries are empty for the day
-            st.info("No workout entries found.")
-            continue
-        for entry in entries:
-            exercise = entry["exercise"]
-            sets = len(entry["sets"])
-            st.write(f"Exercise: {exercise}")
-            st.write(f"Number of Sets: {sets}")
-            for set_num, set_data in enumerate(entry["sets"]):
-                reps = set_data["reps"]
-                weight = set_data["weight"]
-                st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
-            st.write(f"Time: {entry['time']}")
-
-    
-
+    for entry in workout_entries:
+        st.write(f"Exercise: {entry['exercise']}")
+        st.write(f"Number of Sets: {len(entry['sets'])}")
+        for set_num, set_data in enumerate(entry['sets']):
+            reps = set_data["reps"]
+            weight = set_data["weight"]
+            st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
 
 
 
