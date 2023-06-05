@@ -87,6 +87,7 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     st.write("Workout entry added successfully.")
 
 
+
 def display_workout_entries():
     data = load_workout_data()
     entries_by_date = {}
@@ -109,14 +110,11 @@ def display_workout_entries():
             sets = entry["sets"]
             reps = entry["reps"]
             weight = entry["weight"]
-            delete_icon = "<span style='color:red;cursor:pointer;'>&times;</span>"
-            table_data.append([delete_icon, exercise, sets, reps, weight])
+            table_data.append([exercise, sets, reps, weight])
 
-        df = pd.DataFrame(table_data, columns=["Delete", "Exercise", "Sets", "Reps", "Weight"])
-        df.set_index("", inplace=True)  # Set the index to an empty string
+        df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
         st.table(df)
         st.write()
-
 
 
 
