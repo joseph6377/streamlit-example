@@ -93,37 +93,24 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     data[day].append(entry)
     save_workout_data(data)
     st.write("Workout entry added successfully.")
-
-
+    
+    
 def display_workout_entries():
     data = load_workout_data()
 
-    # Group entries by date
-    entries_by_date = {}
     for day, entries in data.items():
-        for entry in entries:
-            date = entry["date"]
-            if date not in entries_by_date:
-                entries_by_date[date] = []
-            entries_by_date[date].append(entry)
-
-    # Display entries by date in a table
-    for date, entries in entries_by_date.items():
-        st.subheader(f"Workout Entries for Date: {date}")
-        table_data = []
-        header = ["Exercise", "Sets", "Reps", "Weight"]
-        table_data.append(header)
-
+        st.subheader(day)
         for entry in entries:
             exercise = entry["exercise"]
-            sets = len(entry["sets"])
-            for set_entry in entry["sets"]:
-                reps = set_entry["reps"]
-                weight = set_entry["weight"]
-                table_data.append([exercise, sets, reps, weight])
+            sets = len(entry["sets"])  # Retrieve the number of sets in the entry
+            st.write(f"Exercise: {exercise}")
+            st.write(f"Number of Sets: {sets}")
+            for set_num in range(sets):
+                set_data = entry["sets"][set_num]
+                reps = set_data["reps"]
+                weight = set_data["weight"]
+                st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
 
-        st.table(table_data)
-        st.write()
 
 
 def main():
