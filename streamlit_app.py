@@ -100,7 +100,7 @@ def display_workout_entries():
 
     # Display entries by date in a table
     for date, entries in entries_by_date.items():
-        st.write(f"Date: {date}")
+        st.subheader(f"Workout Entries for Date: {date}")
         table_data = []
         for entry in entries:
             exercise = entry["exercise"]
