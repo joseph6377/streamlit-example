@@ -2,7 +2,6 @@ import streamlit as st
 import json
 import os
 from datetime import datetime
-import pandas as pd
 
 # Define the exercise data and default values
 exercise_data = {
@@ -95,55 +94,54 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     st.write("Workout entry added successfully.")
 
 
-
 def display_workout_entries():
-    for entry in workout_entries:
-        st.write(f"Exercise: {entry['exercise']}")
-        st.write(f"Number of Sets: {len(entry['sets'])}")
-        for set_num, set_data in enumerate(entry['sets']):
-            reps = set_data["reps"]
-            weight = set_data["weight"]
-            st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
+    workout_entries = []
+    data = load_workout_data()
+    for day, entries in data.items():
+        workout_entries.extend(entries)
 
+    if not workout_entries:
+        st.write("No workout entries found.")
+    else:
+        st.write("Here are all your workout entries:")
+        for entry in workout_entries:
+            date = entry["date"]
+            exercise = entry["exercise"]
+            sets = entry["sets"]
 
+            st.write(f"Date: {date}")
+            st.write(f"Exercise: {exercise}")
+            st.write(f"Number of Sets: {len(sets)}")
+
+            for set_num, set_data in enumerate(sets):
+                reps = set_data["reps"]
+                weight = set_data["weight"]
+                st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
 
 
 def main():
     st.title("Workout Tracker")
 
-choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries"])
+    choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries"])
 
-if choice == "Add a workout entry":
-    day = st.selectbox("Select a combo", list(exercise_data.keys()))
-    exercise = st.selectbox("Select an exercise", exercise_data[day])
-    sets = st.number_input("Enter the number of sets", value=0, step=1)
+    if choice == "Add a workout entry":
+        day = st.selectbox("Select a combo", list(exercise_data.keys()))
+        exercise = st.selectbox("Select an exercise", exercise_data[day])
+        sets = st.number_input("Enter the number of sets", value=0, step=1)
 
-    if sets > 0:
-        st.write("Enter the reps and weight for each set:")
-        for set_num in range(1, sets + 1):
-            st.write(f"Set {set_num}")
-            reps = st.number_input("Reps", value=0, step=1, key=f"{day}-{exercise}-reps-{set_num}")
-            weight = st.number_input("Weight (in kg)", value=0.0, step=0.5, key=f"{day}-{exercise}-weight-{set_num}")
+        if sets > 0:
+            st.write("Enter the reps and weight for each set:")
+            for set_num in range(1, sets + 1):
+                st.write(f"Set {set_num}")
+                reps = st.number_input("Reps", value=0, step=1, key=f"{day}-{exercise}-reps-{set_num}")
+                weight = st.number_input("Weight (in kg)", value=0.0, step=0.5, key=f"{day}-{exercise}-weight-{set_num}")
 
-    if st.button("Add Entry"):
-        add_workout_entry(day, exercise, sets, reps, weight)
+        if st.button("Add Entry"):
+            add_workout_entry(day, exercise, sets, reps, weight)
 
-elif choice == "Display all workout entries":
-    workout_entries = []
-    for entry in load_workout_data():
-        workout_entries.append(entry)
-
-    st.write("Here are all your workout entries:")
-    for entry in workout_entries:
-        st.write(f"Exercise: {entry['exercise']}")
-        st.write(f"Number of Sets: {len(entry['sets'])}")
-        for set_num, set_data in enumerate(entry['sets']):
-            reps = set_data["reps"]
-            weight = set_data["weight"]
-            st.write(f"Set {set_num + 1}: Reps={reps}, Weight={weight} kg")
-
- elif choice == "Display all workout entries":
+    elif choice == "Display all workout entries":
         display_workout_entries()
+
 
 if __name__ == "__main__":
     main()
