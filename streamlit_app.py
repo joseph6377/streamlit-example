@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 from datetime import datetime
+import pandas as pd
 
 # Define the exercise data and default values
 exercise_data = {
@@ -96,32 +97,30 @@ def display_workout_entries():
     if not workout_entries:
         st.write("No workout entries found.")
     else:
-        workout_entries = sorted(workout_entries, key=lambda x: (x["date"], x["exercise"]), reverse=True)
+        workout_entries = sorted(workout_entries, key=lambda x: (x["date"], x["exercise"]))
         grouped_entries = {}
 
         for entry in workout_entries:
-            date = entry["date"]
+            date_str = datetime.strptime(entry["date"], "%Y-%m-%d").strftime("%B %d, %Y (%A)")
             exercise = entry["exercise"]
-            key = (date, exercise)
+            key = (date_str, exercise)
             if key not in grouped_entries:
                 grouped_entries[key] = []
             grouped_entries[key].append(entry)
 
         st.write("Here are all your workout entries:")
 
-        for (date, exercise), entries in grouped_entries.items():
-            st.subheader(date)
-            st.write(f"Exercise: {exercise}")
-            st.write(f"Number of Sets: {len(entries)}")
+        table_data = []
+        for (date_str, exercise), entries in grouped_entries.items():
+            for i, entry in enumerate(entries, start=1):
+                sets = entry["sets"]
+                num_sets = len(sets)
+                reps_list = [set_data.get("reps", 0) for set_data in sets]
+                weight_list = [set_data.get("weight", 0) for set_data in sets]
+                table_data.append((date_str, exercise, num_sets, reps_list, weight_list))
 
-            for entry in entries:
-                set_data = entry["sets"][0]
-                reps = set_data.get("reps", 0)
-                weight = set_data.get("weight", 0)
-                st.write(f"Set: Reps={reps}, Weight={weight} kg")
-
-            st.write("---")
-
+        df = pd.DataFrame(table_data, columns=["Date", "Exercise", "Number of Sets", "Reps", "Weight"])
+        st.dataframe(df)
 def main():
     st.title("Workout Tracker")
 
