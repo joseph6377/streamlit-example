@@ -103,3 +103,24 @@ def display_workout_entries():
     for day, entries in data.items():
         if not day.endswith("_last"):
             for entry in entries:
+                date = entry["date"]
+                if date not in entries_by_date:
+                    entries_by_date[date] = []
+                entries_by_date[date].append(entry)
+
+    # Display entries by date in a table
+    for date, entries in entries_by_date.items():
+        st.subheader(f"Workout Entries for Date: {date}")
+        table_data = []
+        header = ["Exercise", "Sets", "Reps", "Weight"]
+        table_data.append(header)
+
+        for entry in entries:
+            exercise = entry["exercise"]
+            sets = len(entry["sets"])
+            reps = ", ".join(str(set_entry["reps"]) for set_entry in entry["sets"])
+            weight = ", ".join(str(set_entry["weight"]) for set_entry in entry["sets"])
+            table_data.append([exercise, sets, reps, weight])
+
+        st.table(table_data)
+        st.write()
