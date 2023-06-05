@@ -86,11 +86,6 @@ def add_workout_entry(day, exercise, sets, reps, weight):
     save_workout_data(data)
     st.write("Workout entry added successfully.")
 
-import pandas as pd
-
-import pandas as pd
-
-import pandas as pd
 
 def display_workout_entries():
     data = load_workout_data()
@@ -118,7 +113,7 @@ def display_workout_entries():
             table_data.append([delete_icon, exercise, sets, reps, weight])
 
         df = pd.DataFrame(table_data, columns=["Delete", "Exercise", "Sets", "Reps", "Weight"])
-        df = df.style.hide_index()
+        df.set_index("", inplace=True)  # Set the index to an empty string
         st.table(df)
         st.write()
 
