@@ -2,7 +2,6 @@ import streamlit as st
 import json
 import os
 from datetime import datetime
-import pandas as pd
 
 # Define the exercise data and default values
 exercise_data = {
@@ -78,23 +77,23 @@ def add_workout_entry(day, exercise, sets, reps, weight):
         "exercise": exercise,
         "sets": []
     }
-
-    # Collect reps and weight for each set
-    for i in range(sets):
-        set_number = i + 1
-        set_reps = st.number_input(f"Enter reps for Set {set_number}", value=0, step=1, key=f"reps_{set_number}")
-        set_weight = st.number_input(f"Enter weight (in kg) for Set {set_number}", value=0.0, step=0.5, key=f"weight_{set_number}")
-        set_entry = {"set_number": set_number, "reps": set_reps, "weight": set_weight}
-        entry["sets"].append(set_entry)
-
     if day not in data:
         data[day] = []
     data[day].append(entry)
+
+    for set_num in range(1, sets + 1):
+        reps_input = st.number_input(f"Reps for Set {set_num}", value=0, step=1, key=f"{day}-{exercise}-{set_num}")
+        weight_input = st.number_input(f"Weight for Set {set_num} (in kg)", value=0.0, step=0.5, key=f"{day}-{exercise}-{set_num}")
+
+        set_entry = {
+            "set": set_num,
+            "reps": reps_input,
+            "weight": weight_input
+        }
+        data[day][-1]["sets"].append(set_entry)
+
     save_workout_data(data)
     st.write("Workout entry added successfully.")
-
-
-
 
 def display_workout_entries():
     data = load_workout_data()
@@ -104,45 +103,3 @@ def display_workout_entries():
     for day, entries in data.items():
         if not day.endswith("_last"):
             for entry in entries:
-                date = entry["date"]
-                if date not in entries_by_date:
-                    entries_by_date[date] = []
-                entries_by_date[date].append(entry)
-
-    # Display entries by date in a table
-    for date, entries in entries_by_date.items():
-        st.subheader(f"Workout Entries for Date: {date}")
-        table_data = []
-        for entry in entries:
-            exercise = entry["exercise"]
-            sets = entry["sets"]
-            reps = entry["reps"]
-            weight = entry["weight"]
-            table_data.append([exercise, sets, reps, weight])
-
-        df = pd.DataFrame(table_data, columns=["Exercise", "Sets", "Reps", "Weight"])
-        st.table(df)
-        st.write()
-
-
-
-def main():
-    st.title("Workout Tracker by JT")
-
-    choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries", "Quit"])
-    
-    if choice == "Add a workout entry":
-        day = st.selectbox("Select a combo", list(exercise_data.keys()))
-        exercise = st.selectbox("Select an exercise", exercise_data[day])
-        sets = st.number_input("Enter the number of sets", value=0, step=1)
-        reps = st.number_input("Enter the number of reps", value=0, step=1)
-        weight = st.number_input("Enter the weight (in kg)", value=0.0, step=0.5)
-
-        if st.button("Add Entry"):
-            add_workout_entry(day, exercise, sets, reps, weight)
-
-    elif choice == "Display all workout entries":
-        display_workout_entries()
-
-if __name__ == "__main__":
-    main()
