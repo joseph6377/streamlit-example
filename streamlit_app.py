@@ -185,7 +185,7 @@ def login():
 def main(email):
 
 
-    choice = st.selectbox("Select below to add or view past workouts and Graphs!", [" ","Add a workout entry", "Display all workouts and Graphs"])
+    choice = st.selectbox("Select below to add or view past workouts and Graphs!", ["Add a workout entry","Display all workout entries"])
 
     if choice == "Add a workout entry":
         day = st.selectbox("Select a combo", list(exercise_data.keys()))
