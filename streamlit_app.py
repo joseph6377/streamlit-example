@@ -162,8 +162,8 @@ def main():
     if choice == "Add a workout entry":
         day = st.selectbox("Select a combo", list(exercise_data.keys()))
         exercise = st.selectbox("Select an exercise", exercise_data[day])
-        reps = st.number_input("Reps", value=0, step=1)
-        weight = st.number_input("Weight (in kg)", value=0.0, step=0.5)
+        reps = st.number_input("Reps", value=0, step=5)
+        weight = st.number_input("Weight (in kg)", value=0.0, step=2.5)
 
         if st.button("Add Entry"):
             add_workout_entry(day, exercise, reps, weight)
