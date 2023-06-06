@@ -8,9 +8,9 @@ import matplotlib.dates as mdates
 
 # Define the exercise data and default values
 exercise_data = {
-    "Combo 1": [
+    "Chest + Back": [
         "Barbell bench press",
-        "Cable lat pulldown",
+        "Cable lat pull down",
         "Barbell Shoulder Press",
         "Barbell Underhand grip",
         "Decline bench press",
@@ -18,16 +18,16 @@ exercise_data = {
         "Bicep concentration curl",
         "Leg raises"
     ],
-    "Combo 2": [
-        "Barbell Squat",
-        "Dummbbell Split Squat",
+    "Leg + Abs": [
+        "Leg",
+        "Dumbbell Split Squat",
         "Bilateral Seated Leg Press",
         "Db Bridges",
         "Db Walking lunges",
         "Superman",
         "Db Crunches"
     ],
-    "Combo 3": [
+    "Chest + Triceps": [
         "Db Incline chest press",
         "Db Shoulder press seated",
         "Db Incline chest fly",
@@ -36,9 +36,9 @@ exercise_data = {
         "Db Front raise",
         "Decline bench leg raises"
     ],
-    "Combo 4": [
-        "Reverse lat pulldown",
-        "Cable Facepulls",
+    "Back + Bisceps": [
+        "Reverse lat pull down",
+        "Cable Face pulls",
         "Barbell upright row",
         "Barbell Shrug",
         "Low one arm standing row",
@@ -46,7 +46,7 @@ exercise_data = {
         "Bicep 21",
         "Cable Standing twisting crunch"
     ],
-    "Combo 5": [
+    "Legs": [
         "Barbell Squat",
         "Dummbbell Stiff leg deadlift",
         "Dumbbell lunge",
