@@ -5,6 +5,8 @@ from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import re
+import webbrowser
 
 # Define the exercise data and default values
 exercise_data = {
@@ -36,7 +38,7 @@ exercise_data = {
         "Db Front raise",
         "Decline bench leg raises"
     ],
-    "Back + Bisceps": [
+    "Back + Biceps": [
         "Reverse lat pull down",
         "Cable Face pulls",
         "Barbell upright row",
@@ -58,22 +60,24 @@ exercise_data = {
     ]
 }
 
-def load_workout_data():
-    if not os.path.exists("workout_data.json"):
+def load_workout_data(email):
+    filename = f"workout_data_{email}.json"
+    if not os.path.exists(filename):
         return {}
     try:
-        with open("workout_data.json", "r") as file:
+        with open(filename, "r") as file:
             data = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         data = {}
     return data
 
-def save_workout_data(data):
-    with open("workout_data.json", "w") as file:
+def save_workout_data(email, data):
+    filename = f"workout_data_{email}.json"
+    with open(filename, "w") as file:
         json.dump(data, file)
 
-def add_workout_entry(day, exercise, reps, weight):
-    data = load_workout_data()
+def add_workout_entry(email, day, exercise, reps, weight):
+    data = load_workout_data(email)
     entry = {
         "date": datetime.now().strftime("%Y-%m-%d"),
         "day": day,
@@ -86,12 +90,12 @@ def add_workout_entry(day, exercise, reps, weight):
     if day not in data:
         data[day] = []
     data[day].append(entry)
-    save_workout_data(data)
+    save_workout_data(email, data)
     st.write("Workout entry added successfully.")
 
-def display_workout_entries():
+def display_workout_entries(email):
     workout_entries = []
-    data = load_workout_data()
+    data = load_workout_data(email)
 
     for day, entries in data.items():
         workout_entries.extend(entries)
@@ -154,10 +158,34 @@ def display_workout_entries():
             plt.gca().xaxis.set_major_locator(mdates.DayLocator())  # Set x-axis tick frequency to daily
             plt.xticks(rotation=45)
             st.pyplot(plt)
-def main():
-    st.title("Workout Tracker")
 
-    choice = st.sidebar.selectbox("Menu", ["Add a workout entry", "Display all workout entries"])
+
+
+def login():
+    st.title("Welcome to Workout Tracker by Jo")
+
+    st.sidebar.write("Enter your email ID and click Enter to start tracking your workout.")
+
+    email_placeholder = st.sidebar.empty()
+    email = email_placeholder.text_input("Email", key="email")
+
+    # Email format validation
+    email_valid = re.match(r"[^@]+@[^@]+\.[^@]+", email) if email else False
+
+    if email and email_valid:
+        email_placeholder.empty()  # Remove the email input field
+        st.sidebar.success(f"Logged in as: {email}")
+        if st.sidebar.button("Log Out"):
+            webbrowser.open("https://www.google.com")  # Open google.com in the browser
+        else:
+            main(email)
+    elif email and not email_valid:
+        st.sidebar.warning("Please enter a valid email address")
+
+def main(email):
+
+
+    choice = st.selectbox("Select below to add or view past workouts and Graphs!", [" ","Add a workout entry", "Display all workouts and Graphs"])
 
     if choice == "Add a workout entry":
         day = st.selectbox("Select a combo", list(exercise_data.keys()))
@@ -166,10 +194,13 @@ def main():
         weight = st.number_input("Weight (in kg)", value=0.0, step=2.5)
 
         if st.button("Add Entry"):
-            add_workout_entry(day, exercise, reps, weight)
+            add_workout_entry(email, day, exercise, reps, weight)
+            st.write("")  # Add an empty line for spacing
 
     elif choice == "Display all workout entries":
-        display_workout_entries()
+        display_workout_entries(email)
+
+    st.write("")  # Add an empty line for spacing
 
 if __name__ == "__main__":
-    main()
+    login()
