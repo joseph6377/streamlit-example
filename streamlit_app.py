@@ -175,8 +175,7 @@ def login():
     if email and email_valid:
         email_placeholder.empty()  # Remove the email input field
         st.sidebar.success(f"Logged in as: {email}")
-        if st.sidebar.button("Log Out"):
-            webbrowser.open("https://www.google.com")  # Open google.com in the browser
+        
         else:
             main(email)
     elif email and not email_valid:
